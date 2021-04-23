@@ -32,5 +32,16 @@ func (h *Handler) InitRoute() *gin.Engine {
 
 	}
 
+	//config := cors.DefaultConfig()
+	//config.AllowOrigins = []string{"http://localhost:5000/"}
+
+	//router.Use(cors.New(cors.Config{
+	//	AllowOrigins: []string{"*"},
+	//	AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
+	//
+	//}))
+
+	router.Use(CORSMiddleware())
+
 	return router
 }

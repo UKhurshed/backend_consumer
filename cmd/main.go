@@ -22,7 +22,6 @@ import (
 
 func main() {
 
-
 	db, err := repository.NewPostgresDb(repository.Config{
 		Host: "localhost",
 		Port: "5432",
@@ -42,7 +41,7 @@ func main() {
 
 	srv := new(server.Server)
 	go func() {
-		if err := srv.Run("8081", handlers.InitRoute()); err != nil {
+		if err := srv.Run("5000", handlers.InitRoute()); err != nil {
 			log.Fatalf("error occurred with http server: %s", err.Error())
 		}
 	}()
