@@ -10,19 +10,99 @@ definitions:
         type: string
       phone:
         type: string
+    required:
+    - address
+    - name
+    - name_business_entity
+    - phone
+    type: object
+  domain.BuildingUpdateInput:
+    properties:
+      address:
+        type: string
+      name:
+        type: string
+      name_business_entity:
+        type: string
+      phone:
+        type: string
     type: object
   handler.Error:
     properties:
       message:
         type: string
     type: object
-host: localhost:8081
+host: localhost:5000
 info:
   contact: {}
   title: Товарный рынок API
   version: "1.0"
 paths:
   /api/:
+    delete:
+      consumes:
+      - application/json
+      description: delete item with id
+      parameters:
+      - description: building id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Error'
+      summary: DeleteBuildingItem
+    get:
+      consumes:
+      - application/json
+      description: Get all buildings
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Building'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Error'
+      summary: GetAllBuildings
     post:
       consumes:
       - application/json
@@ -58,4 +138,39 @@ paths:
           schema:
             $ref: '#/definitions/handler.Error'
       summary: CreateBuildingItem
+    put:
+      consumes:
+      - application/json
+      description: update chosen item
+      parameters:
+      - description: update building
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.BuildingUpdateInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Error'
+      summary: UpdateBuildingItem
 swagger: "2.0"

@@ -17,7 +17,7 @@ import (
 // @version 1.0
 // description API Server для Веб-приложения "Товарный рынок"
 
-// @host localhost:8081
+// @host localhost:5000
 // @BasePath /api
 
 func main() {

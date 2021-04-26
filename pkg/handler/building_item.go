@@ -37,6 +37,15 @@ func (h *Handler) CreateBuildingItem(c *gin.Context) {
 
 }
 
+// @Summary GetAllBuildings
+// @Description Get all buildings
+// @Accept json
+// @Produce json
+// @Success 200 {array} domain.Building
+// @Failure 400,404 {object} Error
+// @Failure 500 {object} Error
+// @Failure default {object} Error
+// @Router /api/ [get]
 func (h *Handler) GetAllBuildings(c *gin.Context) {
 
 	items, err := h.services.GetAll()
@@ -48,6 +57,16 @@ func (h *Handler) GetAllBuildings(c *gin.Context) {
 	c.JSON(http.StatusOK, DataResponse{items})
 }
 
+// @Summary UpdateBuildingItem
+// @Description update chosen item
+// @Accept json
+// @Produce json
+// @Param input body domain.BuildingUpdateInput true "update building"
+// @Success 200 {string} Status "ok"
+// @Failure 400,404 {object} Error
+// @Failure 500 {object} Error
+// @Failure default {object} Error
+// @Router /api/ [put]
 func (h *Handler) UpdateBuildingItem(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 
@@ -72,6 +91,16 @@ func (h *Handler) UpdateBuildingItem(c *gin.Context) {
 
 }
 
+// @Summary DeleteBuildingItem
+// @Description delete item with id
+// @Accept json
+// @Produce json
+// @Param id path string true "building id"
+// @Success 200 {string} Status "ok"
+// @Failure 400,404 {object} Error
+// @Failure 500 {object} Error
+// @Failure default {object} Error
+// @Router /api/ [delete]
 func (h *Handler) DeleteBuildingItem(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 
