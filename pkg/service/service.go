@@ -19,14 +19,22 @@ type SubjectItem interface {
 	DeleteSubject(subjectId int) error
 }
 
+type Authorization interface {
+	CreateUser(user domain.User) (int, error)
+	GenerateToken(email string, password string) (string, error)
+	ParseToken(accessToken string) (string, error)
+}
+
 type Service struct {
 	BuildingItem
 	SubjectItem
+	Authorization
 }
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		BuildingItem: NewBuildingItemService(repos.BuildingItem),
 		SubjectItem:  NewSubjectService(repos.Subject),
+		Authorization : NewAuthService(repos.Authorization),
 	}
 }

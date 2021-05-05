@@ -6,8 +6,10 @@ import (
 )
 
 const (
+	userTable = "Users"
 	subjectTable = "Subject"
 	formOfOwnerShipTable = "FormOfOwnerShip"
+
 )
 
 type Config struct {

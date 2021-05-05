@@ -86,3 +86,11 @@ create table Subject
     form_of_ownership_id int,
     FOREIGN KEY (form_of_ownership_id) REFERENCES FormOfOwnerShip (id) on delete cascade
 );
+
+create table Users
+(
+    id serial primary key,
+    name text,
+    email text,
+    password_hash text
+)

@@ -19,15 +19,22 @@ type Subject interface {
 	DeleteSubject(subjectId int) error
 }
 
+type Authorization interface {
+	CreateUser(user domain.User) (int, error)
+	GetUser(email, password string) (domain.User, error)
+}
+
 type Repository struct {
 	BuildingItem
 	Subject
+	Authorization
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		BuildingItem: NewBuildingPostgres(db),
 		Subject:      NewSubjectPostgres(db),
+		Authorization: NewAuthPostgres(db),
 		//Subject: NewSubjectPostgres(db),
 	}
 }

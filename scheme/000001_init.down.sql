@@ -15,3 +15,5 @@ drop table Region;
 drop table TradingNetwork;
 
 drop table TypeOfObject;
+
+drop table Users;

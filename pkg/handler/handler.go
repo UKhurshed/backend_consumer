@@ -22,24 +22,30 @@ func (h *Handler) InitRoute() *gin.Engine {
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	api := router.Group("/api")
+	auth := router.Group("/auth")
 	{
-		api.GET("/", h.GetAllBuildings)
-		api.POST("/",  h.CreateBuildingItem)
-		//api.GET("/:id")
-		api.PUT("/:id", h.UpdateBuildingItem)
-		api.DELETE("/:id", h.DeleteBuildingItem)
-
+		auth.POST("/sign-in", h.signIn)
+		auth.POST("/sign-up", h.signUp)
 	}
 
-	subject := router.Group("/subject")
+	api := router.Group("/api", h.userIdentity)
 	{
-		subject.GET("/", h.GetAllSubject)
-		subject.POST("/", h.CreateSubject)
-		subject.PUT("/:id", h.UpdateSubject)
-		subject.DELETE("/:id", h.DeleteSubject)
-	}
+		buildings:= api.Group("/buildings")
+		{
+			buildings.GET("/", h.GetAllBuildings)
+			buildings.POST("/",  h.CreateBuildingItem)
+			buildings.PUT("/:id", h.UpdateBuildingItem)
+			buildings.DELETE("/:id", h.DeleteBuildingItem)
+		}
 
+		subject := api.Group("/subject")
+		{
+			subject.GET("/", h.GetAllSubject)
+			subject.POST("/", h.CreateSubject)
+			subject.PUT("/:id", h.UpdateSubject)
+			subject.DELETE("/:id", h.DeleteSubject)
+		}
+	}
 	//config := cors.DefaultConfig()
 	//config.AllowOrigins = []string{"http://localhost:5000/"}
 
