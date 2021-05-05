@@ -1,4 +1,4 @@
-basePath: /api
+basePath: /
 definitions:
   domain.Building:
     properties:
@@ -27,10 +27,74 @@ definitions:
       phone:
         type: string
     type: object
+  domain.Subject:
+    properties:
+      form_of_owner_ship_id:
+        type: integer
+      full_name_subject:
+        type: string
+      id:
+        type: integer
+      inn:
+        type: string
+      kpp:
+        type: string
+      subject_name:
+        type: string
+    required:
+    - form_of_owner_ship_id
+    - full_name_subject
+    - inn
+    - kpp
+    - subject_name
+    type: object
+  domain.SubjectInput:
+    properties:
+      form_of_owner_ship_id:
+        type: integer
+      full_name_subject:
+        type: string
+      inn:
+        type: string
+      kpp:
+        type: string
+      subject_name:
+        type: string
+    type: object
+  domain.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  handler.DataResponse:
+    properties:
+      data:
+        type: object
+    type: object
   handler.Error:
     properties:
       message:
         type: string
+    type: object
+  handler.signInInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
     type: object
 host: localhost:5000
 info:
@@ -39,40 +103,6 @@ info:
   version: "1.0"
 paths:
   /api/:
-    delete:
-      consumes:
-      - application/json
-      description: delete item with id
-      parameters:
-      - description: building id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/handler.Error'
-        "404":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/handler.Error'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/handler.Error'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/handler.Error'
-      summary: DeleteBuildingItem
     get:
       consumes:
       - application/json
@@ -84,7 +114,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/domain.Building'
+              $ref: '#/definitions/handler.DataResponse'
             type: array
         "400":
           description: Bad Request
@@ -102,7 +132,11 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler.Error'
+      security:
+      - ApiKeyAuth: []
       summary: GetAllBuildings
+      tags:
+      - Объект
     post:
       consumes:
       - application/json
@@ -137,18 +171,22 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler.Error'
+      security:
+      - ApiKeyAuth: []
       summary: CreateBuildingItem
-    put:
+      tags:
+      - Объект
+  /api/:id:
+    delete:
       consumes:
       - application/json
-      description: update chosen item
+      description: delete item with id
       parameters:
-      - description: update building
-        in: body
-        name: input
+      - description: building id
+        in: path
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/domain.BuildingUpdateInput'
+        type: string
       produces:
       - application/json
       responses:
@@ -172,5 +210,291 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: DeleteBuildingItem
+      tags:
+      - Объект
+    put:
+      consumes:
+      - application/json
+      description: update chosen item
+      parameters:
+      - description: update building
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.BuildingUpdateInput'
+      - description: building id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Error'
+      security:
+      - ApiKeyAuth: []
       summary: UpdateBuildingItem
+      tags:
+      - Объект
+  /api/subject:
+    get:
+      consumes:
+      - application/json
+      description: get all subjects
+      operationId: get-all-subjects
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/handler.DataResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Get All Subjects
+      tags:
+      - Субъект
+    post:
+      consumes:
+      - application/json
+      description: create subject
+      operationId: create-subject
+      parameters:
+      - description: subject
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Subject'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Create subject
+      tags:
+      - Субъект
+  /api/subject/:id:
+    delete:
+      consumes:
+      - application/json
+      description: delete item with id
+      parameters:
+      - description: subject id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Subject
+      tags:
+      - Субъект
+    put:
+      consumes:
+      - application/json
+      description: Update subject
+      operationId: Update-subject
+      parameters:
+      - description: update subject
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.SubjectInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Update subject
+      tags:
+      - Субъект
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: login
+      operationId: login
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.signInInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Error'
+      summary: SignIn
+      tags:
+      - auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: create account
+      operationId: create-account
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "404":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Error'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Error'
+      summary: SignUp
+      tags:
+      - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

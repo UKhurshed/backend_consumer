@@ -18,7 +18,11 @@ import (
 // description API Server для Веб-приложения "Товарный рынок"
 
 // @host localhost:5000
-// @BasePath /api
+// @BasePath /
+
+//@securityDefinitions.apikey ApiKeyAuth
+//@in header
+//@name Authorization
 
 func main() {
 

@@ -8,6 +8,8 @@ import (
 )
 
 // @Summary CreateBuildingItem
+// @Security ApiKeyAuth
+// @Tags Объект
 // @Description create a new building item
 // @Accept json
 // @Produce json
@@ -38,10 +40,12 @@ func (h *Handler) CreateBuildingItem(c *gin.Context) {
 }
 
 // @Summary GetAllBuildings
+// @Security ApiKeyAuth
+// @Tags Объект
 // @Description Get all buildings
 // @Accept json
 // @Produce json
-// @Success 200 {array} domain.Building
+// @Success 200 {array} DataResponse
 // @Failure 400,404 {object} Error
 // @Failure 500 {object} Error
 // @Failure default {object} Error
@@ -58,15 +62,18 @@ func (h *Handler) GetAllBuildings(c *gin.Context) {
 }
 
 // @Summary UpdateBuildingItem
+// @Security ApiKeyAuth
+// @Tags Объект
 // @Description update chosen item
 // @Accept json
 // @Produce json
 // @Param input body domain.BuildingUpdateInput true "update building"
+// @Param id path string true "building id"
 // @Success 200 {string} Status "ok"
 // @Failure 400,404 {object} Error
 // @Failure 500 {object} Error
 // @Failure default {object} Error
-// @Router /api/ [put]
+// @Router /api/:id [put]
 func (h *Handler) UpdateBuildingItem(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 
@@ -92,6 +99,8 @@ func (h *Handler) UpdateBuildingItem(c *gin.Context) {
 }
 
 // @Summary DeleteBuildingItem
+// @Security ApiKeyAuth
+// @Tags Объект
 // @Description delete item with id
 // @Accept json
 // @Produce json
@@ -100,7 +109,7 @@ func (h *Handler) UpdateBuildingItem(c *gin.Context) {
 // @Failure 400,404 {object} Error
 // @Failure 500 {object} Error
 // @Failure default {object} Error
-// @Router /api/ [delete]
+// @Router /api/:id [delete]
 func (h *Handler) DeleteBuildingItem(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 
