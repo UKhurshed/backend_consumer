@@ -85,8 +85,6 @@ func (r *BuildingPostgres) Update(buildingId int, building domain.BuildingUpdate
 
 	return err
 
-
-
 }
 
 

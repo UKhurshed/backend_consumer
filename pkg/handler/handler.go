@@ -32,6 +32,14 @@ func (h *Handler) InitRoute() *gin.Engine {
 
 	}
 
+	subject := router.Group("/subject")
+	{
+		subject.GET("/", h.GetAllSubject)
+		subject.POST("/", h.CreateSubject)
+		subject.PUT("/:id", h.UpdateSubject)
+		subject.DELETE("/:id", h.DeleteSubject)
+	}
+
 	//config := cors.DefaultConfig()
 	//config.AllowOrigins = []string{"http://localhost:5000/"}
 

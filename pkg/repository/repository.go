@@ -5,10 +5,6 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type BuildingList interface {
-
-}
-
 type BuildingItem interface {
 	CreateBuildingItem(building domain.Building) (int, error)
 	Delete(buildingId int) error
@@ -16,13 +12,22 @@ type BuildingItem interface {
 	Update(buildingId int, building domain.BuildingUpdateInput) error
 }
 
-type Repository struct {
-	BuildingList
-	BuildingItem
+type Subject interface {
+	GetAllSubjects() ([]domain.Subject, error)
+	CreateSubject(subject domain.Subject) (int, error)
+	UpdateSubject(subjectId int, subject domain.SubjectInput) error
+	DeleteSubject(subjectId int) error
 }
 
-func NewRepository(db *sqlx.DB) *Repository{
+type Repository struct {
+	BuildingItem
+	Subject
+}
+
+func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		BuildingItem: NewBuildingPostgres(db),
+		Subject:      NewSubjectPostgres(db),
+		//Subject: NewSubjectPostgres(db),
 	}
 }

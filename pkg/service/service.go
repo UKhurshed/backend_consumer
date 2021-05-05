@@ -5,10 +5,6 @@ import (
 	"backend_consumer/pkg/repository"
 )
 
-type BuildingList interface {
-
-}
-
 type BuildingItem interface {
 	CreateBuildingItem(building domain.Building) (int, error)
 	Delete(buildingId int) error
@@ -16,13 +12,21 @@ type BuildingItem interface {
 	Update(buildingId int, building domain.BuildingUpdateInput) error
 }
 
-type Service struct {
-	BuildingList
-	BuildingItem
+type SubjectItem interface {
+	GetAllSubjects() ([]domain.Subject, error)
+	CreateSubject(subject domain.Subject) (int, error)
+	UpdateSubject(subjectId int, subject domain.SubjectInput) error
+	DeleteSubject(subjectId int) error
 }
 
-func NewService(repos *repository.Repository) *Service{
+type Service struct {
+	BuildingItem
+	SubjectItem
+}
+
+func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		BuildingItem: NewBuildingItemService(repos.BuildingItem),
+		SubjectItem:  NewSubjectService(repos.Subject),
 	}
 }
