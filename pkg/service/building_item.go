@@ -21,12 +21,12 @@ func (s *BuildingItemService) Delete(buildingId int) error {
 	return s.repo.Delete(buildingId)
 }
 
-func (s *BuildingItemService) GetAll() ([]domain.Building, error) {
-	return s.repo.GetAll()
+func (s *BuildingItemService) GetAll(nameBuilding, typeOfObject, networkTrading, region, microDistrict, streetName, openIn string) ([]domain.BuildingSelect, error) {
+	return s.repo.GetAll(nameBuilding, typeOfObject, networkTrading, region, microDistrict, streetName, openIn)
 }
 
 func (s *BuildingItemService) Update(buildingId int, building domain.BuildingUpdateInput) error {
-	if err := building.Validate(); err != nil{
+	if err := building.Validate(); err != nil {
 		return err
 	}
 	return s.repo.Update(buildingId, building)

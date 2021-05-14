@@ -8,6 +8,10 @@ import (
 const (
 	userTable = "Users"
 	subjectTable = "Subject"
+	buildingEntityTable = "BuildingEntity"
+	regionTable = "Region"
+	tradingNetworkTable = "TradingNetwork"
+	typeOfObjectsTable = "TypeOfObject"
 	formOfOwnerShipTable = "FormOfOwnerShip"
 
 )

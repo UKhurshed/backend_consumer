@@ -52,7 +52,31 @@ func (h *Handler) CreateBuildingItem(c *gin.Context) {
 // @Router /api/ [get]
 func (h *Handler) GetAllBuildings(c *gin.Context) {
 
-	items, err := h.services.GetAll()
+
+	//params
+	nameBuilding := c.Request.URL.Query().Get("name_building")
+	typeOfObject := c.Request.URL.Query().Get("object_type")
+	networkTrading := c.Request.URL.Query().Get("network_trading")
+	region := c.Request.URL.Query().Get("name_region")
+	microDistrict := c.Request.URL.Query().Get("micro_district")
+	streetName := c.Request.URL.Query().Get("street_name")
+	openIn := c.Request.URL.Query().Get("open_in")
+
+
+	if len(typeOfObject) == 0 {
+		typeOfObject = strconv.Itoa(0)
+	}
+
+	if len(networkTrading) == 0 {
+		networkTrading = strconv.Itoa(0)
+	}
+
+	if len(region) == 0 {
+		region = strconv.Itoa(0)
+	}
+
+
+		items, err := h.services.GetAll(nameBuilding, typeOfObject, networkTrading, region, microDistrict, streetName, openIn)
 
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())

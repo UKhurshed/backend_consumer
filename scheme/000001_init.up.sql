@@ -10,7 +10,7 @@
 create table TypeOfObject
 (
     id          serial primary key,
-    object_type text
+    type_object text
 );
 
 create table TradingNetwork
@@ -51,23 +51,25 @@ create table BuildingAddress
 
 create table BuildingEntity
 (
-    id                serial primary key,
-    name_building     text,
-    object_type       bool default false,
-    self_service      bool default false,
-    availability_asu  bool default false,
-    total_area        int,
-    retail_space      int,
-    opening_date      date,
-    closing_date      date,
-    workPlaceCount    int,
-    employee_count    int,
-    address_id        int,
-    typeOfObject_id   int,
-    tradingNetwork_id int,
-    FOREIGN KEY (typeOfObject_id) REFERENCES TypeOfObject (id) on delete cascade,
-    FOREIGN KEY (tradingNetwork_id) REFERENCES TradingNetwork (id) on delete cascade,
-    FOREIGN KEY (address_id) REFERENCES BuildingAddress (id) on delete cascade
+    id                  serial primary key,
+    name_building       text,
+    object_type         bool default false,
+    self_service        bool default false,
+    availability_asu    bool default false,
+    total_area          int,
+    retail_space        int,
+    opening_date        date,
+    closing_date        date,
+    workPlaceCount      int,
+    employee_count      int,
+    street_name         text,
+    micro_district_name text,
+    region_id           int,
+    typeOfObject_id     int,
+    tradingNetwork_id   int,
+    FOREIGN KEY (typeOfObject_id) REFERENCES TypeOfObject (id),
+    FOREIGN KEY (tradingNetwork_id) REFERENCES TradingNetwork (id),
+    FOREIGN KEY (region_id) REFERENCES Region (id)
 );
 
 create table FormOfOwnerShip
@@ -89,8 +91,8 @@ create table Subject
 
 create table Users
 (
-    id serial primary key,
-    name text,
-    email text,
+    id            serial primary key,
+    name          text,
+    email         text,
     password_hash text
 )

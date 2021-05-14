@@ -28,7 +28,8 @@ func (h *Handler) InitRoute() *gin.Engine {
 		auth.POST("/sign-up", h.signUp)
 	}
 
-	api := router.Group("/api", h.userIdentity)
+	//for token need to add h.userIdentity
+	api := router.Group("/api")
 	{
 		buildings:= api.Group("/buildings")
 		{

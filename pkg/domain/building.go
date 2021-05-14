@@ -1,6 +1,8 @@
 package domain
 
-import "errors"
+import (
+	"errors"
+)
 
 type Building struct {
 	Id                 int    `json:"-" db:"id"`
@@ -8,6 +10,25 @@ type Building struct {
 	Address            string `json:"address" db:"address" binding:"required"`
 	Phone              string `json:"phone" db:"phone" binding:"required"`
 	NameBusinessEntity string `json:"name_business_entity" db:"name_business_entity" binding:"required"`
+}
+
+type BuildingSelect struct {
+	Id                int    `json:"id" db:"id"`
+	NameBuilding      string `json:"name_building" db:"name_building"`
+	ObjectType        bool   `json:"object_type" db:"object_type"`
+	SelfService       bool   `json:"self_service" db:"self_service"`
+	AvailabilityAsu   bool   `json:"availability_asu" db:"availability_asu"`
+	TotalArea         int    `json:"total_area" db:"total_area"`
+	RetailSpace       int    `json:"retail_space" db:"retail_space"`
+	OpeningDate       *string `json:"opening_date" db:"opening_date"`
+	ClosingDate       *string `json:"closing_date" db:"closing_date"`
+	WorkPlaceCount    int    `json:"work_place_count" db:"workplacecount"`
+	EmployeeCount     int    `json:"employee_count" db:"employee_count"`
+	TypeObject        string `json:"type_object" db:"type_object"`
+	NetworkTrading    string `json:"network_trading" db:"network_trading"`
+	NameRegion        string `json:"name_region" db:"name_region"`
+	StreetName        *string `json:"street_name" db:"street_name"`
+	MicroDistrictName string `json:"micro_district_name" db:"micro_district_name"`
 }
 
 type BuildingUpdateInput struct {
