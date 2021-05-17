@@ -14,7 +14,7 @@ import (
 // @ID get-all-subjects
 // @Accept  json
 // @Produce  json
-// @Success 200 {array} DataResponse
+// @Success 200 {array} dataResponse
 // @Failure 400,404 {object} Error
 // @Failure 500 {object} Error
 // @Failure default {object} Error
@@ -23,10 +23,10 @@ func (h *Handler) GetAllSubject(c *gin.Context) {
 	subjects, err := h.services.GetAllSubjects()
 
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		newResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, DataResponse{subjects})
+	c.JSON(http.StatusOK, dataResponse{subjects})
 }
 
 
@@ -47,13 +47,13 @@ func (h *Handler) CreateSubject(c *gin.Context) {
 	var input domain.Subject
 
 	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newResponse(c, http.StatusBadRequest, "invalid input body")
 		return
 	}
 
 	id, err := h.services.CreateSubject(input)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		newResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -79,17 +79,17 @@ func (h *Handler) UpdateSubject(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid id params")
+		newResponse(c, http.StatusBadRequest, "invalid id params")
 		return
 	}
 
 	var input domain.SubjectInput
 	if err := c.BindJSON(&input); err != nil{
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newResponse(c, http.StatusBadRequest, "invalid input body")
 		return
 	}
 	if err := h.services.UpdateSubject(id, input); err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		newResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -114,13 +114,13 @@ func (h *Handler) DeleteSubject(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid id params")
+		newResponse(c, http.StatusBadRequest, "invalid id params")
 		return
 	}
 
 	err = h.services.DeleteSubject(id)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		newResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 	c.JSON(http.StatusOK, statusResponse{"ok"})

@@ -23,13 +23,13 @@ func (h *Handler) CreateBuildingItem(c *gin.Context) {
 	var input domain.Building
 
 	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newResponse(c, http.StatusBadRequest, "invalid input body")
 		return
 	}
 
 	id, err := h.services.CreateBuildingItem(input)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		newResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -45,13 +45,12 @@ func (h *Handler) CreateBuildingItem(c *gin.Context) {
 // @Description Get all buildings
 // @Accept json
 // @Produce json
-// @Success 200 {array} DataResponse
+// @Success 200 {array} dataResponse
 // @Failure 400,404 {object} Error
 // @Failure 500 {object} Error
 // @Failure default {object} Error
 // @Router /api/ [get]
 func (h *Handler) GetAllBuildings(c *gin.Context) {
-
 
 	//params
 	nameBuilding := c.Request.URL.Query().Get("name_building")
@@ -79,10 +78,10 @@ func (h *Handler) GetAllBuildings(c *gin.Context) {
 		items, err := h.services.GetAll(nameBuilding, typeOfObject, networkTrading, region, microDistrict, streetName, openIn)
 
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		newResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, DataResponse{items})
+	c.JSON(http.StatusOK, dataResponse{items})
 }
 
 // @Summary UpdateBuildingItem
@@ -102,17 +101,17 @@ func (h *Handler) UpdateBuildingItem(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid id params")
+		newResponse(c, http.StatusBadRequest, "invalid id params")
 		return
 	}
 
 	var input domain.BuildingUpdateInput
 	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newResponse(c, http.StatusBadRequest, "invalid input body")
 		return
 	}
 	if err := h.services.Update(id, input); err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		newResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -138,13 +137,13 @@ func (h *Handler) DeleteBuildingItem(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid id params")
+		newResponse(c, http.StatusBadRequest, "invalid id params")
 		return
 	}
 
 	err = h.services.Delete(id)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		newResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 	c.JSON(http.StatusOK, statusResponse{"ok"})
