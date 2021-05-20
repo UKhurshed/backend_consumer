@@ -39,16 +39,16 @@ func (r *BuildingPostgres) GetAll(nameBuilding, typeOfObject, networkTrading, re
 	//       FROM BuildingEntity bt, TypeOfObject tf, TradingNetwork tn, Region rg
 	//WHERE bt.region_id = rg.id and bt.typeOfObject_id = tf.id and bt.tradingNetwork_id = tn.id;
 
-	if nameBuilding == "" && microDistrict == "" && streetName == "" && openIn == ""{
-		query:= fmt.Sprintf(`SELECT bt.id, bt.name_building, bt.object_type, bt.self_service, bt.availability_asu, bt.total_area,
-        bt.retail_space, bt.opening_date, bt.closing_date, bt.workPlaceCount, bt.employee_count,
-        tf.type_object, tn.network_trading, rg.name_region, bt.street_name, bt.micro_district_name
+	if nameBuilding == "" && microDistrict == "" && streetName == "" && openIn == "" {
+		query := fmt.Sprintf(`SELECT bt.id, bt.name_building, bt.name_full_building, bt.object_type, bt.self_service, bt.availability_asu, bt.total_area,
+        bt.retail_space, bt.opening_date, bt.closing_date, bt.workPlaceCount, bt.employee_count, bt.inn, bt.kpp,
+        tf.type_object, tn.network_trading, rg.name_region, bt.street_name, bt.micro_district_name, fs.form_name
 		FROM BuildingEntity bt inner join TypeOfObject tf on bt.typeOfObject_id=tf.id inner join
-		TradingNetwork tn on bt.tradingNetwork_id=tn.id inner join Region rg on bt.region_id = rg.id;`)
-		if err := r.db.Select(&items, query); err != nil{
+    	TradingNetwork tn on bt.tradingNetwork_id=tn.id inner join Region rg on bt.region_id = rg.id inner join FormOfOwnerShip fs on bt.id=fs.id;`)
+		if err := r.db.Select(&items, query); err != nil {
 			return nil, err
 		}
-	}else{
+	} else {
 		query := fmt.Sprintf(`SELECT bt.id, bt.name_building, bt.object_type, bt.self_service, bt.availability_asu, bt.total_area,
         bt.retail_space, bt.opening_date, bt.closing_date, bt.workPlaceCount, bt.employee_count,
         tf.type_object, tn.network_trading, rg.name_region, bt.street_name, bt.micro_district_name
@@ -63,7 +63,6 @@ func (r *BuildingPostgres) GetAll(nameBuilding, typeOfObject, networkTrading, re
 			return nil, err
 		}
 	}
-
 
 	return items, nil
 

@@ -1,7 +1,3 @@
-drop table Subject;
-
-drop table FormOfOwnerShip;
-
 drop table BuildingEntity;
 
 drop table BuildingAddress;
@@ -17,3 +13,5 @@ drop table TradingNetwork;
 drop table TypeOfObject;
 
 drop table Users;
+
+drop table FormOfOwnerShip;

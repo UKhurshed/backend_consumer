@@ -31,7 +31,7 @@ func (h *Handler) InitRoute() *gin.Engine {
 	//for token need to add h.userIdentity
 	api := router.Group("/api")
 	{
-		buildings:= api.Group("/buildings")
+		buildings:= api.Group("/buildings", h.userIdentity)
 		{
 			buildings.GET("/", h.GetAllBuildings)
 			buildings.POST("/",  h.CreateBuildingItem)
