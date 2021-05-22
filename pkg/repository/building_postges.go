@@ -19,8 +19,13 @@ func NewBuildingPostgres(db *sqlx.DB) *BuildingPostgres {
 
 func (r *BuildingPostgres) CreateBuildingItem(building domain.Building) (int, error) {
 	var id int
-	query := fmt.Sprintf("INSERT INTO %s (name, address, phone, name_business_entity) values ($1, $2, $3, $4) RETURNING id", "buildings")
-	row := r.db.QueryRow(query, building.Name, building.Address, building.Phone, building.NameBusinessEntity)
+	query := fmt.Sprintf("INSERT INTO %s (name_building, name_full_building, object_type, self_service," +
+		"availability_asu, total_area, retail_space, opening_date, workPlaceCount, employee_count, street_name," +
+		"micro_district_name, inn, kpp, region_id, typeOfObject_id, tradingNetwork_id, form_owner_id) " +
+		"values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18 ) RETURNING id", "BuildingEntity")
+	row := r.db.QueryRow(query, building.NameBuilding, building.NameFullBuilding, building.ObjectType, building.SelfService,
+		building.AvailabilityAsu, building.TotalArea, building.RetailSpace, building.OpeningDate, building.WorkPlaceCount, building.EmployeeCount,
+		building.StreetName, building.MicroDistrictName, building.Inn, building.Kpp, building.RegionId, building.TypeObjectId, building.TradingNetworkId, building.FormOwnerId)
 
 	if err := row.Scan(&id); err != nil {
 		return 0, err
@@ -80,27 +85,27 @@ func (r *BuildingPostgres) Update(buildingId int, building domain.BuildingUpdate
 	args := make([]interface{}, 0)
 	argId := 1
 
-	if building.Name != nil {
+	if building.NameBuilding != nil {
 		setValues = append(setValues, fmt.Sprintf("name=$%d", argId))
-		args = append(args, *building.Name)
+		args = append(args, *building.NameBuilding)
 		argId++
 	}
 
-	if building.Phone != nil {
+	if building.NameFullBuilding != nil {
 		setValues = append(setValues, fmt.Sprintf("phone=$%d", argId))
-		args = append(args, *building.Phone)
+		args = append(args, *building.NameFullBuilding)
 		argId++
 	}
 
-	if building.Address != nil {
+	if building.SelfService != nil {
 		setValues = append(setValues, fmt.Sprintf("address=$%d", argId))
-		args = append(args, *building.Address)
+		args = append(args, *building.SelfService)
 		argId++
 	}
 
-	if building.NameBusinessEntity != nil {
+	if building.AvailabilityAsu != nil {
 		setValues = append(setValues, fmt.Sprintf("nameBusinessEntity=$%d", argId))
-		args = append(args, *building.NameBusinessEntity)
+		args = append(args, *building.AvailabilityAsu)
 		argId++
 	}
 

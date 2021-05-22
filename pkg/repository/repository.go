@@ -35,6 +35,5 @@ func NewRepository(db *sqlx.DB) *Repository {
 		BuildingItem: NewBuildingPostgres(db),
 		Subject:      NewSubjectPostgres(db),
 		Authorization: NewAuthPostgres(db),
-		//Subject: NewSubjectPostgres(db),
 	}
 }
