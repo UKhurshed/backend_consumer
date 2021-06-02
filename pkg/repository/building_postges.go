@@ -44,12 +44,12 @@ func (r *BuildingPostgres) GetAll(nameBuilding, typeOfObject, networkTrading, re
 	//       FROM BuildingEntity bt, TypeOfObject tf, TradingNetwork tn, Region rg
 	//WHERE bt.region_id = rg.id and bt.typeOfObject_id = tf.id and bt.tradingNetwork_id = tn.id;
 
-	if nameBuilding == "" && microDistrict == "" && streetName == "" && openIn == "" {
-		query := fmt.Sprintf(`SELECT bt.id, bt.name_building, bt.name_full_building, bt.object_type, bt.self_service, bt.availability_asu, bt.total_area,
-        bt.retail_space, bt.opening_date, bt.closing_date, bt.workPlaceCount, bt.employee_count, bt.inn, bt.kpp,
-        tf.type_object, tn.network_trading, rg.name_region, bt.street_name, bt.micro_district_name, fs.form_name
-		FROM BuildingEntity bt inner join TypeOfObject tf on bt.typeOfObject_id=tf.id inner join
-    	TradingNetwork tn on bt.tradingNetwork_id=tn.id inner join Region rg on bt.region_id = rg.id inner join FormOfOwnerShip fs on bt.id=fs.id;`)
+	if nameBuilding == "" && microDistrict == "" && streetName == "" && openIn == "" && typeOfObject == "0" && networkTrading == "0" && region == "0" {
+		query := fmt.Sprintf(`SELECT bt.id, bt.name_building, bt.name_full_building, bt.object_type, bt.self_service, bt.availability_asu,
+       bt.total_area, bt.retail_space, bt.opening_date, bt.closing_date, bt.workPlaceCount, bt.employee_count,
+       bt.inn, bt.kpp, tf.type_object, tn.network_trading, rg.name_region, fs.form_name
+       from BuildingEntity bt JOIN TypeOfObject tf on bt.typeOfObject_id = tf.id JOIN TradingNetwork tn on bt.tradingNetwork_id = tn.id
+          JOIN Region rg on bt.region_id=rg.id JOIN FormOfOwnerShip fs on bt.form_owner_id = fs.id;`)
 		if err := r.db.Select(&items, query); err != nil {
 			return nil, err
 		}
@@ -63,7 +63,7 @@ func (r *BuildingPostgres) GetAll(nameBuilding, typeOfObject, networkTrading, re
 		bt.tradingNetwork_id = $4 or bt.street_name = $5 or bt.micro_district_name = $6) and bt.opening_date > $7`, buildingEntityTable, typeOfObjectsTable, tradingNetworkTable, regionTable)
 
 		//or bt.typeOfObject_id=$2 or bt.tradingNetwork_id=$3 or bt.region_id=$4 or bt.street_name=$5 or bt.micro_district_name > $6
-		fmt.Printf("Data" + openIn)
+
 		if err := r.db.Select(&items, query, nameBuilding, region, typeOfObject, networkTrading, streetName, microDistrict, "2000-12-31"); err != nil {
 			return nil, err
 		}
@@ -75,7 +75,7 @@ func (r *BuildingPostgres) GetAll(nameBuilding, typeOfObject, networkTrading, re
 }
 
 func (r *BuildingPostgres) Delete(buildingId int) error {
-	query := fmt.Sprintf(`DELETE FROM %s WHERE id = $1`, "buildings")
+	query := fmt.Sprintf(`DELETE FROM %s WHERE id = $1`, "BuildingEntity")
 	_, err := r.db.Exec(query, buildingId)
 	return err
 }
@@ -86,32 +86,122 @@ func (r *BuildingPostgres) Update(buildingId int, building domain.BuildingUpdate
 	argId := 1
 
 	if building.NameBuilding != nil {
-		setValues = append(setValues, fmt.Sprintf("name=$%d", argId))
+		setValues = append(setValues, fmt.Sprintf("name_building=$%d", argId))
 		args = append(args, *building.NameBuilding)
 		argId++
 	}
 
 	if building.NameFullBuilding != nil {
-		setValues = append(setValues, fmt.Sprintf("phone=$%d", argId))
+		setValues = append(setValues, fmt.Sprintf("name_full_building=$%d", argId))
 		args = append(args, *building.NameFullBuilding)
 		argId++
 	}
 
+	if building.ObjectType != nil {
+		setValues = append(setValues, fmt.Sprintf("object_type=$%d", argId))
+		args = append(args, *building.ObjectType)
+		argId++
+	}
+
 	if building.SelfService != nil {
-		setValues = append(setValues, fmt.Sprintf("address=$%d", argId))
+		setValues = append(setValues, fmt.Sprintf("self_service=$%d", argId))
 		args = append(args, *building.SelfService)
 		argId++
 	}
 
 	if building.AvailabilityAsu != nil {
-		setValues = append(setValues, fmt.Sprintf("nameBusinessEntity=$%d", argId))
+		setValues = append(setValues, fmt.Sprintf("availability_asu=$%d", argId))
 		args = append(args, *building.AvailabilityAsu)
+		argId++
+	}
+
+	if building.TotalArea != nil {
+		setValues = append(setValues, fmt.Sprintf("total_area=$%d", argId))
+		args = append(args, *building.TotalArea)
+		argId++
+	}
+
+	if building.RetailSpace != nil {
+		setValues = append(setValues, fmt.Sprintf("retail_space=$%d", argId))
+		args = append(args, *building.RetailSpace)
+		argId++
+	}
+
+	if building.OpeningDate != nil {
+		setValues = append(setValues, fmt.Sprintf("opening_date=$%d", argId))
+		args = append(args, *building.OpeningDate)
+		argId++
+	}
+
+	if building.ClosingDate != nil {
+		setValues = append(setValues, fmt.Sprintf("closing_date=$%d", argId))
+		args = append(args, *building.ClosingDate)
+		argId++
+	}
+
+	if building.WorkPlaceCount != nil {
+		setValues = append(setValues, fmt.Sprintf("workPlaceCount=$%d", argId))
+		args = append(args, *building.WorkPlaceCount)
+		argId++
+	}
+
+	if building.EmployeeCount != nil {
+		setValues = append(setValues, fmt.Sprintf("employee_count=$%d", argId))
+		args = append(args, *building.EmployeeCount)
+		argId++
+	}
+
+	if building.StreetName != nil {
+		setValues = append(setValues, fmt.Sprintf("street_name=$%d", argId))
+		args = append(args, *building.StreetName)
+		argId++
+	}
+
+	if building.MicroDistrictName != nil {
+		setValues = append(setValues, fmt.Sprintf("micro_district_name=$%d", argId))
+		args = append(args, *building.MicroDistrictName)
+		argId++
+	}
+
+	if building.Inn != nil {
+		setValues = append(setValues, fmt.Sprintf("inn=$%d", argId))
+		args = append(args, *building.Inn)
+		argId++
+	}
+
+	if building.Kpp != nil {
+		setValues = append(setValues, fmt.Sprintf("kpp=$%d", argId))
+		args = append(args, *building.Kpp)
+		argId++
+	}
+
+	if building.RegionId != nil {
+		setValues = append(setValues, fmt.Sprintf("region_id=$%d", argId))
+		args = append(args, *building.RegionId)
+		argId++
+	}
+
+	if building.TypeObjectId != nil {
+		setValues = append(setValues, fmt.Sprintf("typeOfObject_id=$%d", argId))
+		args = append(args, *building.TypeObjectId)
+		argId++
+	}
+
+	if building.TradingNetworkId != nil {
+		setValues = append(setValues, fmt.Sprintf("tradingNetwork_id=$%d", argId))
+		args = append(args, *building.TradingNetworkId)
+		argId++
+	}
+
+	if building.FormOwnerId != nil {
+		setValues = append(setValues, fmt.Sprintf("form_owner_id=$%d", argId))
+		args = append(args, *building.FormOwnerId)
 		argId++
 	}
 
 	setQuery := strings.Join(setValues, ", ")
 
-	query := fmt.Sprintf(`UPDATE buildings SET %s WHERE id=$%d`, setQuery, argId)
+	query := fmt.Sprintf(`UPDATE BuildingEntity SET %s WHERE id=$%d`, setQuery, argId)
 
 	args = append(args, buildingId)
 

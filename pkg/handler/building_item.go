@@ -2,6 +2,7 @@ package handler
 
 import (
 	"backend_consumer/pkg/domain"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -23,7 +24,7 @@ func (h *Handler) CreateBuildingItem(c *gin.Context) {
 	var input domain.Building
 
 	if err := c.BindJSON(&input); err != nil {
-		newResponse(c, http.StatusBadRequest, "invalid input body")
+		newResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -54,7 +55,7 @@ func (h *Handler) GetAllBuildings(c *gin.Context) {
 
 	//params
 	nameBuilding := c.Request.URL.Query().Get("name_building")
-	typeOfObject := c.Request.URL.Query().Get("object_type")
+	typeOfObject := c.Request.URL.Query().Get("type_object")
 	networkTrading := c.Request.URL.Query().Get("network_trading")
 	region := c.Request.URL.Query().Get("name_region")
 	microDistrict := c.Request.URL.Query().Get("micro_district")
@@ -74,6 +75,9 @@ func (h *Handler) GetAllBuildings(c *gin.Context) {
 		region = strconv.Itoa(0)
 	}
 
+	fmt.Println("Network Trading: ", networkTrading)
+	fmt.Println("TypeOfObject: ", typeOfObject)
+	fmt.Println("Region: ", region)
 
 		items, err := h.services.GetAll(nameBuilding, typeOfObject, networkTrading, region, microDistrict, streetName, openIn)
 

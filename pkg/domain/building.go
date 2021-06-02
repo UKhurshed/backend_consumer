@@ -4,11 +4,11 @@ import "errors"
 
 type Building struct {
 	Id                int    `json:"-" db:"id"`
-	NameBuilding      string `json:"name_building" db:"name_building" binding:"required"`
-	NameFullBuilding  string `json:"name_full_buildings" db:"name_full_building" binding:"required"`
-	ObjectType        bool   `json:"object_type" db:"object_type" binding:"required"`
-	SelfService       bool   `json:"self_service" db:"self_service" binding:"required"`
-	AvailabilityAsu   bool   `json:"availability_asu" db:"availability_asu" binding:"required"`
+	NameBuilding      string `json:"name_building" db:"name_building"`
+	NameFullBuilding  string `json:"name_full_building" db:"name_full_building"`
+	ObjectType        bool   `json:"object_type,omitempty" db:"object_type"`
+	SelfService       bool   `json:"self_service,omitempty" db:"self_service"`
+	AvailabilityAsu   bool   `json:"availability_asu,omitempty" db:"availability_asu"`
 	TotalArea         int    `json:"total_area" db:"total_area" binding:"required"`
 	RetailSpace       int    `json:"retail_space" db:"retail_space" binding:"required"`
 	OpeningDate       string `json:"opening_date" db:"opening_date" binding:"required"`
