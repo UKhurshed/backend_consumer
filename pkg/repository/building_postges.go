@@ -50,7 +50,7 @@ func (r *BuildingPostgres) GetAll(nameBuilding, typeOfObject, networkTrading, re
 	if nameBuilding == ""  && typeOfObject == "0" && networkTrading == "0" && region == "0" {
 		fmt.Println("Without filtering")
 		query := fmt.Sprintf(`SELECT bt.id, bt.name_building, bt.name_full_building, bt.object_type, bt.self_service, bt.availability_asu,
-       bt.total_area, bt.retail_space, bt.opening_date, bt.closing_date, bt.workPlaceCount, bt.employee_count,
+       bt.total_area, bt.retail_space, bt.opening_date, bt.closing_date, bt.workPlaceCount, bt.employee_count, bt.street_name, bt.micro_district_name,
        bt.inn, bt.kpp, tf.type_object, tn.network_trading, rg.name_region, fs.form_name
        from BuildingEntity bt JOIN TypeOfObject tf on bt.typeOfObject_id = tf.id JOIN TradingNetwork tn on bt.tradingNetwork_id = tn.id
           JOIN Region rg on bt.region_id=rg.id JOIN FormOfOwnerShip fs on bt.form_owner_id = fs.id;`)
@@ -69,7 +69,7 @@ func (r *BuildingPostgres) GetAll(nameBuilding, typeOfObject, networkTrading, re
 		          JOIN Region rg on bt.region_id=rg.id JOIN FormOfOwnerShip fs on bt.form_owner_id = fs.id where tn.id = 0 or tf.id = 0 or rg.id=3 or bt.name_building='';
 		 */
 		query := fmt.Sprintf(`SELECT bt.id, bt.name_building, bt.object_type, bt.self_service, bt.availability_asu, bt.total_area,
-        bt.retail_space, bt.opening_date, bt.closing_date, bt.workPlaceCount, bt.employee_count, bt.inn, bt.kpp, 
+        bt.retail_space, bt.opening_date, bt.closing_date, bt.workPlaceCount, bt.employee_count, bt.street_name, bt.micro_district_name, bt.inn, bt.kpp, 
         tf.type_object, tn.network_trading, rg.name_region, fs.form_name
 		from %s bt JOIN %s tf on bt.typeOfObject_id = tf.id JOIN
     	%s tn on bt.tradingNetwork_id = tn.id JOIN %s rg on bt.region_id = rg.id JOIN %s fs on bt.form_owner_id = fs.id
