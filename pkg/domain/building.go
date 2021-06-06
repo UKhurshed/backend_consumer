@@ -9,19 +9,19 @@ type Building struct {
 	ObjectType        bool   `json:"object_type,omitempty" db:"object_type"`
 	SelfService       bool   `json:"self_service,omitempty" db:"self_service"`
 	AvailabilityAsu   bool   `json:"availability_asu,omitempty" db:"availability_asu"`
-	TotalArea         int    `json:"total_area" db:"total_area" binding:"required"`
-	RetailSpace       int    `json:"retail_space" db:"retail_space" binding:"required"`
-	OpeningDate       string `json:"opening_date" db:"opening_date" binding:"required"`
-	WorkPlaceCount    int    `json:"work_place_count" db:"workplacecount" binding:"required"`
-	EmployeeCount     int    `json:"employee_count" db:"employee_count" binding:"required"`
-	StreetName        string `json:"street_name" db:"street_name" binding:"required"`
-	MicroDistrictName string `json:"micro_district_name" db:"micro_district_name" binding:"required"`
-	Inn               string `json:"inn" db:"inn" binding:"required"`
-	Kpp               string `json:"kpp" db:"kpp" binding:"required"`
-	TypeObjectId      int    `json:"type_object_id" db:"typeOfObject_id" binding:"required"`
-	RegionId          int    `json:"region_id" db:"region_id" binding:"required"`
-	TradingNetworkId  int    `json:"trading_network_id" db:"tradingNetwork_id" binding:"required"`
-	FormOwnerId       int    `json:"form_owner_id" db:"form_owner_id" binding:"required"`
+	TotalArea         int    `json:"total_area" db:"total_area"`
+	RetailSpace       int    `json:"retail_space" db:"retail_space"`
+	OpeningDate       string `json:"opening_date" db:"opening_date"`
+	WorkPlaceCount    int    `json:"work_place_count" db:"workplacecount"`
+	EmployeeCount     int    `json:"employee_count" db:"employee_count"`
+	StreetName        string `json:"street_name" db:"street_name"`
+	MicroDistrictName string `json:"micro_district_name" db:"micro_district_name" `
+	Inn               string `json:"inn" db:"inn"`
+	Kpp               string `json:"kpp" db:"kpp"`
+	TypeObjectId      int    `json:"type_object_id" db:"typeOfObject_id" `
+	RegionId          int    `json:"region_id" db:"region_id"`
+	TradingNetworkId  int    `json:"trading_network_id" db:"tradingNetwork_id"`
+	FormOwnerId       int    `json:"form_owner_id" db:"form_owner_id"`
 }
 
 type BuildingSelect struct {
@@ -33,7 +33,7 @@ type BuildingSelect struct {
 	AvailabilityAsu   bool    `json:"availability_asu" db:"availability_asu"`
 	TotalArea         int     `json:"total_area" db:"total_area"`
 	RetailSpace       int     `json:"retail_space" db:"retail_space"`
-	OpeningDate       *string `json:"opening_date" db:"opening_date"`
+	OpeningDate       string `json:"opening_date" db:"opening_date"`
 	ClosingDate       *string `json:"closing_date" db:"closing_date"`
 	WorkPlaceCount    int     `json:"work_place_count" db:"workplacecount"`
 	EmployeeCount     int     `json:"employee_count" db:"employee_count"`

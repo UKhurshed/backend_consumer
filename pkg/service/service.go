@@ -8,7 +8,7 @@ import (
 type BuildingItem interface {
 	CreateBuildingItem(building domain.Building) (int, error)
 	Delete(buildingId int) error
-	GetAll(nameBuilding, typeOfObject, networkTrading, region, microDistrict, streetName, openIn string) ([]domain.BuildingSelect, error)
+	GetAll(nameBuilding, typeOfObject, networkTrading, region string) ([]domain.BuildingSelect, error)
 	Update(buildingId int, building domain.BuildingUpdateInput) error
 }
 

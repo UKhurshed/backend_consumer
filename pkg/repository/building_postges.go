@@ -19,6 +19,9 @@ func NewBuildingPostgres(db *sqlx.DB) *BuildingPostgres {
 
 func (r *BuildingPostgres) CreateBuildingItem(building domain.Building) (int, error) {
 	var id int
+
+	fmt.Println("Micro: " + building.MicroDistrictName)
+	fmt.Println("Street: " + building.StreetName)
 	query := fmt.Sprintf("INSERT INTO %s (name_building, name_full_building, object_type, self_service," +
 		"availability_asu, total_area, retail_space, opening_date, workPlaceCount, employee_count, street_name," +
 		"micro_district_name, inn, kpp, region_id, typeOfObject_id, tradingNetwork_id, form_owner_id) " +
@@ -34,7 +37,7 @@ func (r *BuildingPostgres) CreateBuildingItem(building domain.Building) (int, er
 	return id, nil
 }
 
-func (r *BuildingPostgres) GetAll(nameBuilding, typeOfObject, networkTrading, region, microDistrict, streetName, openIn string) ([]domain.BuildingSelect, error) {
+func (r *BuildingPostgres) GetAll(nameBuilding, typeOfObject, networkTrading, region string) ([]domain.BuildingSelect, error) {
 	var items []domain.BuildingSelect
 
 	//SELECT
@@ -44,7 +47,8 @@ func (r *BuildingPostgres) GetAll(nameBuilding, typeOfObject, networkTrading, re
 	//       FROM BuildingEntity bt, TypeOfObject tf, TradingNetwork tn, Region rg
 	//WHERE bt.region_id = rg.id and bt.typeOfObject_id = tf.id and bt.tradingNetwork_id = tn.id;
 
-	if nameBuilding == "" && microDistrict == "" && streetName == "" && openIn == "" && typeOfObject == "0" && networkTrading == "0" && region == "0" {
+	if nameBuilding == ""  && typeOfObject == "0" && networkTrading == "0" && region == "0" {
+		fmt.Println("Without filtering")
 		query := fmt.Sprintf(`SELECT bt.id, bt.name_building, bt.name_full_building, bt.object_type, bt.self_service, bt.availability_asu,
        bt.total_area, bt.retail_space, bt.opening_date, bt.closing_date, bt.workPlaceCount, bt.employee_count,
        bt.inn, bt.kpp, tf.type_object, tn.network_trading, rg.name_region, fs.form_name
@@ -54,17 +58,27 @@ func (r *BuildingPostgres) GetAll(nameBuilding, typeOfObject, networkTrading, re
 			return nil, err
 		}
 	} else {
+		fmt.Println("filtering")
+
+		/*
+		bt.street_name, bt.micro_district_name
+		SELECT bt.id, bt.name_building, bt.name_full_building, bt.object_type, bt.self_service, bt.availability_asu,
+		       bt.total_area, bt.retail_space, bt.opening_date, bt.closing_date, bt.workPlaceCount, bt.employee_count,
+		       bt.inn, bt.kpp, tf.type_object, tn.network_trading, rg.name_region, fs.form_name
+		       from BuildingEntity bt JOIN TypeOfObject tf on bt.typeOfObject_id = tf.id JOIN TradingNetwork tn on bt.tradingNetwork_id = tn.id
+		          JOIN Region rg on bt.region_id=rg.id JOIN FormOfOwnerShip fs on bt.form_owner_id = fs.id where tn.id = 0 or tf.id = 0 or rg.id=3 or bt.name_building='';
+		 */
 		query := fmt.Sprintf(`SELECT bt.id, bt.name_building, bt.object_type, bt.self_service, bt.availability_asu, bt.total_area,
-        bt.retail_space, bt.opening_date, bt.closing_date, bt.workPlaceCount, bt.employee_count,
-        tf.type_object, tn.network_trading, rg.name_region, bt.street_name, bt.micro_district_name
-		FROM %s bt inner join %s tf on bt.typeOfObject_id=tf.id inner join
-    	%s tn on bt.tradingNetwork_id=tn.id inner join %s rg on bt.region_id = rg.id
-		WHERE (bt.name_building = $1 OR bt.region_id = $2 or bt.typeOfObject_id = $3 or
-		bt.tradingNetwork_id = $4 or bt.street_name = $5 or bt.micro_district_name = $6) and bt.opening_date > $7`, buildingEntityTable, typeOfObjectsTable, tradingNetworkTable, regionTable)
+        bt.retail_space, bt.opening_date, bt.closing_date, bt.workPlaceCount, bt.employee_count, bt.inn, bt.kpp, 
+        tf.type_object, tn.network_trading, rg.name_region, fs.form_name
+		from %s bt JOIN %s tf on bt.typeOfObject_id = tf.id JOIN
+    	%s tn on bt.tradingNetwork_id = tn.id JOIN %s rg on bt.region_id = rg.id JOIN %s fs on bt.form_owner_id = fs.id
+		WHERE bt.name_building = $1 or rg.id = $2 or tf.id = $3 or
+		tn.id = $4`, buildingEntityTable, typeOfObjectsTable, tradingNetworkTable, regionTable, formOfOwnerShipTable)
 
 		//or bt.typeOfObject_id=$2 or bt.tradingNetwork_id=$3 or bt.region_id=$4 or bt.street_name=$5 or bt.micro_district_name > $6
 
-		if err := r.db.Select(&items, query, nameBuilding, region, typeOfObject, networkTrading, streetName, microDistrict, "2000-12-31"); err != nil {
+		if err := r.db.Select(&items, query, nameBuilding, region, typeOfObject, networkTrading); err != nil {
 			return nil, err
 		}
 	}

@@ -12,7 +12,7 @@ type signInInput struct {
 }
 
 // @Summary SignIn
-// @Tags auth
+// @Tags Авторизация
 // @Description login
 // @ID login
 // @Accept  json
@@ -43,7 +43,7 @@ func (h *Handler) signIn(c *gin.Context){
 }
 
 // @Summary SignUp
-// @Tags auth
+// @Tags Авторизация
 // @Description create account
 // @ID create-account
 // @Accept  json

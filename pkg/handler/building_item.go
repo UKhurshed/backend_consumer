@@ -19,7 +19,7 @@ import (
 // @Failure 400,404 {object} Error
 // @Failure 500 {object} Error
 // @Failure default {object} Error
-// @Router /api/ [post]
+// @Router /api/buildings [post]
 func (h *Handler) CreateBuildingItem(c *gin.Context) {
 	var input domain.Building
 
@@ -50,7 +50,7 @@ func (h *Handler) CreateBuildingItem(c *gin.Context) {
 // @Failure 400,404 {object} Error
 // @Failure 500 {object} Error
 // @Failure default {object} Error
-// @Router /api/ [get]
+// @Router /api/buildings [get]
 func (h *Handler) GetAllBuildings(c *gin.Context) {
 
 	//params
@@ -58,9 +58,6 @@ func (h *Handler) GetAllBuildings(c *gin.Context) {
 	typeOfObject := c.Request.URL.Query().Get("type_object")
 	networkTrading := c.Request.URL.Query().Get("network_trading")
 	region := c.Request.URL.Query().Get("name_region")
-	microDistrict := c.Request.URL.Query().Get("micro_district")
-	streetName := c.Request.URL.Query().Get("street_name")
-	openIn := c.Request.URL.Query().Get("open_in")
 
 
 	if len(typeOfObject) == 0 {
@@ -79,7 +76,7 @@ func (h *Handler) GetAllBuildings(c *gin.Context) {
 	fmt.Println("TypeOfObject: ", typeOfObject)
 	fmt.Println("Region: ", region)
 
-		items, err := h.services.GetAll(nameBuilding, typeOfObject, networkTrading, region, microDistrict, streetName, openIn)
+		items, err := h.services.GetAll(nameBuilding, typeOfObject, networkTrading, region)
 
 	if err != nil {
 		newResponse(c, http.StatusInternalServerError, err.Error())
@@ -100,7 +97,7 @@ func (h *Handler) GetAllBuildings(c *gin.Context) {
 // @Failure 400,404 {object} Error
 // @Failure 500 {object} Error
 // @Failure default {object} Error
-// @Router /api/:id [put]
+// @Router /api/buildings/:id [put]
 func (h *Handler) UpdateBuildingItem(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 
@@ -111,7 +108,7 @@ func (h *Handler) UpdateBuildingItem(c *gin.Context) {
 
 	var input domain.BuildingUpdateInput
 	if err := c.BindJSON(&input); err != nil {
-		newResponse(c, http.StatusBadRequest, "invalid input body")
+		newResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 	if err := h.services.Update(id, input); err != nil {
@@ -136,7 +133,7 @@ func (h *Handler) UpdateBuildingItem(c *gin.Context) {
 // @Failure 400,404 {object} Error
 // @Failure 500 {object} Error
 // @Failure default {object} Error
-// @Router /api/:id [delete]
+// @Router /api/buildings/:id [delete]
 func (h *Handler) DeleteBuildingItem(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 

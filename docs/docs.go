@@ -24,7 +24,7 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/": {
+        "/api/buildings": {
             "get": {
                 "security": [
                     {
@@ -48,7 +48,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/handler.DataResponse"
+                                "$ref": "#/definitions/handler.dataResponse"
                             }
                         }
                     },
@@ -140,7 +140,7 @@ var doc = `{
                 }
             }
         },
-        "/api/:id": {
+        "/api/buildings/:id": {
             "put": {
                 "security": [
                     {
@@ -294,7 +294,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/handler.DataResponse"
+                                "$ref": "#/definitions/handler.dataResponse"
                             }
                         }
                     },
@@ -520,7 +520,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Авторизация"
                 ],
                 "summary": "SignIn",
                 "operationId": "login",
@@ -579,7 +579,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Авторизация"
                 ],
                 "summary": "SignUp",
                 "operationId": "create-account",
@@ -632,41 +632,122 @@ var doc = `{
     "definitions": {
         "domain.Building": {
             "type": "object",
-            "required": [
-                "address",
-                "name",
-                "name_business_entity",
-                "phone"
-            ],
             "properties": {
-                "address": {
+                "availability_asu": {
+                    "type": "boolean"
+                },
+                "employee_count": {
+                    "type": "integer"
+                },
+                "form_owner_id": {
+                    "type": "integer"
+                },
+                "inn": {
                     "type": "string"
                 },
-                "name": {
+                "kpp": {
                     "type": "string"
                 },
-                "name_business_entity": {
+                "micro_district_name": {
                     "type": "string"
                 },
-                "phone": {
+                "name_building": {
                     "type": "string"
+                },
+                "name_full_building": {
+                    "type": "string"
+                },
+                "object_type": {
+                    "type": "boolean"
+                },
+                "opening_date": {
+                    "type": "string"
+                },
+                "region_id": {
+                    "type": "integer"
+                },
+                "retail_space": {
+                    "type": "integer"
+                },
+                "self_service": {
+                    "type": "boolean"
+                },
+                "street_name": {
+                    "type": "string"
+                },
+                "total_area": {
+                    "type": "integer"
+                },
+                "trading_network_id": {
+                    "type": "integer"
+                },
+                "type_object_id": {
+                    "type": "integer"
+                },
+                "work_place_count": {
+                    "type": "integer"
                 }
             }
         },
         "domain.BuildingUpdateInput": {
             "type": "object",
             "properties": {
-                "address": {
+                "availability_asu": {
+                    "type": "boolean"
+                },
+                "closing_date": {
                     "type": "string"
                 },
-                "name": {
+                "employee_count": {
+                    "type": "integer"
+                },
+                "form_owner_id": {
+                    "type": "integer"
+                },
+                "inn": {
                     "type": "string"
                 },
-                "name_business_entity": {
+                "kpp": {
                     "type": "string"
                 },
-                "phone": {
+                "micro_district_name": {
                     "type": "string"
+                },
+                "name_building": {
+                    "type": "string"
+                },
+                "name_full_building": {
+                    "type": "string"
+                },
+                "object_type": {
+                    "type": "boolean"
+                },
+                "opening_date": {
+                    "type": "integer"
+                },
+                "region_id": {
+                    "type": "integer"
+                },
+                "retail_space": {
+                    "type": "integer"
+                },
+                "self_service": {
+                    "type": "boolean"
+                },
+                "street_name": {
+                    "type": "string"
+                },
+                "total_area": {
+                    "type": "integer"
+                },
+                "trading_network_id": {
+                    "type": "integer"
+                },
+                "type_object_id": {
+                    "type": "integer"
+                },
+                "work_place_count": {
+                    "type": "integer"
                 }
             }
         },
@@ -742,19 +823,19 @@ var doc = `{
                 }
             }
         },
-        "handler.DataResponse": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "object"
-                }
-            }
-        },
         "handler.Error": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "handler.dataResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
                 }
             }
         },
